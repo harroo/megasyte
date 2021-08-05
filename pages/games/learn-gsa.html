@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+    <head>
+        <title>Harros GSA Game</title>
+        <style>
+            @font-face { font-family: ubuntu-th; src: url('/fonts/ubuntu-font-family-0.83/Ubuntu-Th.ttf'); }
+            @font-face { font-family: ubuntu-r; src: url('/fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf'); }
+            @font-face { font-family: ubuntu-mono; src: url('/fonts/ubuntu-font-family-0.83/UbuntuMono-R.ttf'); }
+            @font-face { font-family: gsa; src: url('/fonts/gsa.ttf'); }
+            .display {
+                font-family: gsa;
+                text-align: center;
+                font-size: 7.5vw;
+            }
+            .hotbar {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 7.5vw;
+            }
+            .buttonA {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .buttonB {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .buttonC {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .response {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            .sound {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            .score {
+                font-family: ubuntu-mono;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            body {
+                background-color: Black;
+                color: White;
+            }
+        </style>
+    </head>
+    <body onload="UpdateDisplay()">
+        <div class="display">
+            <p id="score" class="score">Score: 0</p>
+            <p id="symbol" class="symbol">?</p>
+            <p class="sound">In Latin is?</p>
+        <div class="hotbar">
+            <input
+                id="buttonA"
+                class="buttonA"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(0)"
+            />
+            <input
+                id="buttonB"
+                class="buttonB"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(1)"
+            />
+            <input
+                id="buttonC"
+                class="buttonC"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(2)"
+            />
+        </div>
+        <div class="feedback">
+            <p id="response" class="response"></p>
+        </div>
+        <script>
+            var characters = [
+                "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+                "p","q","r","s","t","u","v","w","x","y","z","A","B","C","D",
+                "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S",
+                "T","U","V","W","X","Y","Z","~","!","@","#","$","%","^","&",
+                "*","(",")","_","+","`","1","2","3","4","5","6","7","8","9",
+                "0","-","=","[","]","{","}",":","\"",";","'","<",">",",",
+                ".","/","?","\\","|"
+            ];
+            var correctIndex = 0; var score = 0;
+            function UniversalOnClick (clickIndex) {
+
+                if (clickIndex == correctIndex) {
+
+                    new Audio("/sounds/orb.mp3").play();
+                    SetGoodFeedback();
+
+                    score++;
+                    document.getElementById("score").innerHTML = "Score: " + score;
+
+                    UpdateDisplay();
+
+                } else {
+
+                    new Audio("/sounds/fail.mp3").play();
+                    SetBadFeedback();
+
+                    score = 0;
+                    document.getElementById("score").innerHTML = "Score: " + score;
+                }
+            }
+            function UpdateDisplay () {
+
+                var index = Math.floor(Math.random() * characters.length);
+
+                document.getElementById("symbol").innerHTML = characters[index];
+
+                var x = Math.floor(Math.random() * 3);
+                correctIndex = x;
+
+                document.getElementById("buttonA").value = characters[Math.floor(Math.random() * characters.length)];
+                document.getElementById("buttonB").value = characters[Math.floor(Math.random() * characters.length)];
+                document.getElementById("buttonC").value = characters[Math.floor(Math.random() * characters.length)];
+
+                if (x == 0) document.getElementById("buttonA").value = characters[index];
+                if (x == 1) document.getElementById("buttonB").value = characters[index];
+                if (x == 2) document.getElementById("buttonC").value = characters[index];
+            }
+            var feedbackGood = [
+                "nice!", "nice one!", "woohoo", "epic!",
+                "good work!", "you got it right there"
+            ];
+            var feedbackBad = [
+                "nice one baka", "baka!", "baka baka baka",
+                "you suck", "aaaand you failed", "try again",
+                "youll get it next time", "maybe not that one",
+                "it aint that one lol", "again!", "nice work baka"
+            ];
+            function SetGoodFeedback () {
+
+                document.getElementById("response").innerHTML = feedbackGood[Math.floor(Math.random() * feedbackGood.length)];
+            }
+            function SetBadFeedback () {
+
+                document.getElementById("response").innerHTML = feedbackBad[Math.floor(Math.random() * feedbackBad.length)];
+            }
+        </script>
+    </body>
+</html>
+<!--
+    アイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヰヱヲンヴ
+>
