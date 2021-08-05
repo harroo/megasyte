@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+    <head>
+        <style>
+            @font-face { font-family: ubuntu-th; src: url('/fonts/ubuntu-font-family-0.83/Ubuntu-Th.ttf'); }
+            @font-face { font-family: ubuntu-r; src: url('/fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf'); }
+            @font-face { font-family: ubuntu-mono; src: url('/fonts/ubuntu-font-family-0.83/UbuntuMono-R.ttf'); }
+            .display {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 7.5vw;
+            }
+            .hotbar {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 7.5vw;
+            }
+            .buttonA {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .buttonB {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .buttonC {
+                border-color: Grey;
+                background-color: Black;
+                color: White;
+                padding: 1.5vw 3.2vw;
+                font-family: ubuntu-r;
+                font-size: 2.5vw;
+            }
+            .response {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            .sound {
+                font-family: ubuntu-r;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            .score {
+                font-family: ubuntu-mono;
+                text-align: center;
+                font-size: 3.5vw;
+            }
+            body {
+                background-color: Black;
+                color: White;
+            }
+        </style>
+    </head>
+    <body onload="UpdateDisplay()">
+        <div class="display">
+            <p id="score" class="score">Score: 0</p>
+            <p id="symbol" class="symbol">?</p>
+            <p class="sound">Makes what sound?</p>
+        <div class="hotbar">
+            <input
+                id="buttonA"
+                class="buttonA"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(0)"
+            />
+            <input
+                id="buttonB"
+                class="buttonB"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(1)"
+            />
+            <input
+                id="buttonC"
+                class="buttonC"
+                type="button"
+                value="Toggle"
+                onclick="UniversalOnClick(2)"
+            />
+        </div>
+        <div class="feedback">
+            <p id="response" class="response"></p>
+        </div>
+        <script>
+            var letters = [
+                "ア","イ","ウ","エ","オ","カ","ガ","キ","ギ","ク","グ","ケ","ゲ",
+                "コ","ゴ","サ","ザ","シ","ジ","ス","ズ","セ","ゼ","ソ","ゾ","タ",
+                "ダ","チ","ヂ","ツ","ヅ","テ","デ","ト","ド","ナ","ニ","ヌ","ネ",
+                "ノ","ハ","バ","パ","ヒ","ビ","ピ","フ","ブ","プ","ヘ","ベ","ペ",
+                "ホ","ボ","ポ","マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ",
+                "ル","レ","ロ","ワ","ヰ","ヱ","ヲ","ン","ヴ"
+            ];
+            var sounds = [
+                "A","I","U","E","O","Ka","Ga","Ki","Gi","Ku","Gu","Ke","Ge",
+                "Ko","Go","Sa","Za","Si","Zi","Su","Zu","Se","Ze","So","Zo","Ta",
+                "Da","Ti","Di","Tu","Du","Te","De","To","Do","Na","Ni","Nu","Ne",
+                "No","Ha","Ba","Pa","Hi","Bi","Pi","Hu","Bu","Pu","He","Be","Pe",
+                "Ho","Bo","Po","Ma","Mi","Mu","Me","Mo","Ya","Yu","Yo","Ra","Ri",
+                "Ru","Re","Ro","Wa","Wi","We","Wo","N","Vu"
+            ];
+            var correctIndex = 0; var score = 0;
+            function UniversalOnClick (clickIndex) {
+
+                if (clickIndex == correctIndex) {
+
+                    new Audio("/sounds/orb.mp3").play();
+                    SetGoodFeedback();
+
+                    score++;
+                    document.getElementById("score").innerHTML = "Score: " + score;
+
+                    UpdateDisplay();
+
+                } else {
+
+                    new Audio("/sounds/fail.mp3").play();
+                    SetBadFeedback();
+
+                    score = 0;
+                    document.getElementById("score").innerHTML = "Score: " + score;
+                }
+            }
+            function UpdateDisplay () {
+
+                var index = Math.floor(Math.random() * letters.length);
+
+                document.getElementById("symbol").innerHTML = letters[index];
+
+                var x = Math.floor(Math.random() * 3);
+                correctIndex = x;
+
+                document.getElementById("buttonA").value = sounds[Math.floor(Math.random() * sounds.length)];
+                document.getElementById("buttonB").value = sounds[Math.floor(Math.random() * sounds.length)];
+                document.getElementById("buttonC").value = sounds[Math.floor(Math.random() * sounds.length)];
+
+                if (x == 0) document.getElementById("buttonA").value = sounds[index];
+                if (x == 1) document.getElementById("buttonB").value = sounds[index];
+                if (x == 2) document.getElementById("buttonC").value = sounds[index];
+            }
+            var feedbackGood = [
+                "nice!", "nice one!", "woohoo", "epic!",
+                "good work!", "you got it right there"
+            ];
+            var feedbackBad = [
+                "nice one baka", "baka!", "baka baka baka",
+                "you suck", "aaaand you failed", "try again",
+                "youll get it next time", "maybe not that one",
+                "it aint that one lol", "again!", "nice work baka"
+            ];
+            function SetGoodFeedback () {
+
+                document.getElementById("response").innerHTML = feedbackGood[Math.floor(Math.random() * feedbackGood.length)];
+            }
+            function SetBadFeedback () {
+
+                document.getElementById("response").innerHTML = feedbackBad[Math.floor(Math.random() * feedbackBad.length)];
+            }
+        </script>
+    </body>
+</html>
+<!--
+    アイウエオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヰヱヲンヴ
+>
